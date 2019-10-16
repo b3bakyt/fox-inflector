@@ -92,7 +92,7 @@ const SINGULARS = {
  * @var array the special rules for converting a word between its plural form and singular form.
  * The keys are the special words in singular form, and the values are the corresponding plural form.
  */
-const SPECIALS = {
+const SINGLE_PLURALS = {
     'atlas': 'atlases',
     'beef': 'beefs',
     'brother': 'brothers',
@@ -215,6 +215,11 @@ const SPECIALS = {
     'thief': 'thieves',
 };
 
+const PLURAL_SINGLES = Object.entries(SINGLE_PLURALS).reduce((res, val) => {
+    return {...res, [val[1]]: val[0]}
+}, {});
+
+
 /**
  * @var array map of special chars and its translation. This is used by [[slug()]].
  */
@@ -297,8 +302,8 @@ const Inflector = {
      * @return string the pluralized word
      */
     pluralize: function(word) {
-        if (SPECIALS[word])
-            return SPECIALS[word];
+        if (SINGLE_PLURALS[word])
+            return SINGLE_PLURALS[word];
 
         for (let rule in PLURALS) {
             const replaceData = PLURALS[rule];
@@ -315,7 +320,7 @@ const Inflector = {
      * @return string Singular noun.
      */
     singularize: function(word) {
-        const result = SPECIALS[word];
+        const result = PLURAL_SINGLES[word];
         if (result) {
             return result;
         }
@@ -328,6 +333,7 @@ const Inflector = {
         }
         return word;
     },
+
     // /**
     //  * Converts an underscored or CamelCase word into a English
     //  * sentence.
