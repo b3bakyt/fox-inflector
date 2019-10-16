@@ -7,12 +7,12 @@ const {
 } = Chai;
 
 
-describe('Record creation', () => {
-    it('The function create should return a created record', (done) => {
-        expect(Inflector.pluralize('word')).toEqual('words');
-        done();
-
-        expect(Inflector.pluralize('deer')).toEqual('deer');
+describe('pluralize tests', () => {
+    it('The function pluralize should return plural with s in the end', (done) => {
+        expect(Inflector.pluralize('word')).equal('words');
+        expect(Inflector.pluralize('issue')).equal('issues');
+        expect(Inflector.pluralize('box')).equal('boxes');
+        expect(Inflector.pluralize('apple')).equal('apples');
         done();
     });
 });

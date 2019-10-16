@@ -11,88 +11,88 @@
  * @var array the rules for converting a word into its plural form.
  * The keys are the regular expressions and the values are the corresponding replacements.
  */
-const plurals = {
-    '([nrlm]ese|deer|fish|sheep|measles|ois|pox|media)': '$1',
-    '^(sea[- ]bass)': '$1',
-    '(m)ove': '$1oves',
-    '(f)oot': '$1eet',
-    '(h)uman': '$1umans',
-    '(s)tatus': '$1tatuses',
-    '(s)taff': '$1taff',
-    '(t)ooth': '$1eeth',
-    '(quiz)': '$1zes',
-    '^(ox)': '$1$2en',
-    '([m|l])ouse': '$1ice',
-    '(matr|vert|ind)(ix|ex)': '$1ices',
-    '(x|ch|ss|sh)': '$1es',
-    '([^aeiouy]|qu)y': '$1ies',
-    '(hive)': '$1s',
-    '(?:([^f])fe|([lr])f)': '$1$2ves',
-    'sis': 'ses',
-    '([ti])um': '$1a',
-    '(p)erson': '$1eople',
-    '(m)an': '$1en',
-    '(c)hild': '$1hildren',
-    '(buffal|tomat|potat|ech|her|vet)o': '$1oes',
-    '(alumn|bacill|cact|foc|fung|nucle|radi|stimul|syllab|termin|vir)us': '$1i',
-    'us': 'uses',
-    '(alias)': '$1es',
-    '(ax|cris|test)is': '$1es',
-    's': 's',
-    '^': '',
-    '': 's',
+const PLURALS = {
+    '([nrlm]ese|deer|fish|sheep|measles|ois|pox|media)$': {replace: '$1', option: 'i'},
+    '(sea[- ]bass)$': {replace: '$1', option: 'i'},
+    '(m)ove$': {replace: '$1oves', option: 'i'},
+    '(f)oot$': {replace: '$1eet', option: 'i'},
+    '(h)uman$': {replace: '$1umans', option: 'i'},
+    '(s)tatus$': {replace: '$1tatuses', option: 'i'},
+    '(s)taff$': {replace: '$1taff', option: 'i'},
+    '(t)ooth$': {replace: '$1eeth', option: 'i'},
+    '(quiz)$': {replace: '$1zes', option: 'i'},
+    '^(ox)$': {replace: '$1$2en', option: 'i'},
+    '([m|l])ouse$': {replace: '$1ice', option: 'i'},
+    '(matr|vert|ind)(ix|ex)$': {replace: '$1ices', option: 'i'},
+    '(x|ch|ss|sh)$': {replace: '$1es', option: 'i'},
+    '([^aeiouy]|qu)y$': {replace: '$1ies', option: 'i'},
+    '(hive)$': {replace: '$1s', option: 'i'},
+    '(?:([^f])fe|([lr])f)$': {replace: '$1$2ves', option: 'i'},
+    'sis$': {replace: 'ses', option: 'i'},
+    '([ti])um$': {replace: '$1a', option: 'i'},
+    '(p)erson$': {replace: '$1eople', option: 'i'},
+    '(m)an$': {replace: '$1en', option: 'i'},
+    '(c)hild$': {replace: '$1hildren', option: 'i'},
+    '(buffal|tomat|potat|ech|her|vet)o$': {replace: '$1oes', option: 'i'},
+    '(alumn|bacill|cact|foc|fung|nucle|radi|stimul|syllab|termin|vir)us$': {replace: '$1i', option: 'i'},
+    'us$': {replace: 'uses', option: 'i'},
+    '(alias)$': {replace: '$1es', option: 'i'},
+    '(ax|cris|test)is$': {replace: '$1es', option: 'i'},
+    's$': {replace: 's'},
+    '^$': {replace: ''},
+    '$': {replace: 's'},
 };
 
 /**
  * @var array the rules for converting a word into its singular form.
  * The keys are the regular expressions and the values are the corresponding replacements.
  */
-const singulars = {
-    '([nrlm]ese|deer|fish|sheep|measles|ois|pox|media|ss)': '$1',
-    '^(sea[- ]bass)': '$1',
-    '(s)tatuses': '$1tatus',
-    '(f)eet': '$1oot',
-    '(t)eeth': '$1ooth',
-    '^(.*)(menu)s': '$1$2',
-    '(quiz)zes': '\\1',
-    '(matr)ices': '$1ix',
-    '(vert|ind)ices': '$1ex',
-    '^(ox)en': '$1',
-    '(alias)(es)*': '$1',
-    '(alumn|bacill|cact|foc|fung|nucle|radi|stimul|syllab|termin|viri?)i': '$1us',
-    '([ftw]ax)es': '$1',
-    '(cris|ax|test)es': '$1is',
-    '(shoe|slave)s': '$1',
-    '(o)es': '$1',
-    'ouses': 'ouse',
-    '([^a])uses': '$1us',
-    '([m|l])ice': '$1ouse',
-    '(x|ch|ss|sh)es': '$1',
-    '(m)ovies': '$1$2ovie',
-    '(s)eries': '$1$2eries',
-    '([^aeiouy]|qu)ies': '$1y',
-    '([lr])ves': '$1f',
-    '(tive)s': '$1',
-    '(hive)s': '$1',
-    '(drive)s': '$1',
-    '([^fo])ves': '$1fe',
-    '(^analy)ses': '$1sis',
-    '(analy|diagno|^ba|(p)arenthe|(p)rogno|(s)ynop|(t)he)ses': '$1$2sis',
-    '([ti])a': '$1um',
-    '(p)eople': '$1$2erson',
-    '(m)en': '$1an',
-    '(c)hildren': '$1$2hild',
-    '(n)ews': '$1$2ews',
-    'eaus': 'eau',
-    '^(.*us)': '\\1',
-    's': '',
+const SINGULARS = {
+    '([nrlm]ese|deer|fish|sheep|measles|ois|pox|media|ss)$': {replace: '$1', option: 'i'},
+    '^(sea[- ]bass)$': {replace: '$1', option: 'i'},
+    '(s)tatuses$': {replace: '$1tatus', option: 'i'},
+    '(f)eet$': {replace: '$1oot', option: 'i'},
+    '(t)eeth$': {replace: '$1ooth', option: 'i'},
+    '^(.*)(menu)s$': {replace: '$1$2', option: 'i'},
+    '(quiz)zes$': {replace: '$$1', option: 'i'},
+    '(matr)ices$': {replace: '$1ix', option: 'i'},
+    '(vert|ind)ices$': {replace: '$1ex', option: 'i'},
+    '^(ox)en': {replace: '$1', option: 'i'},
+    '(alias)(es)*$': {replace: '$1', option: 'i'},
+    '(alumn|bacill|cact|foc|fung|nucle|radi|stimul|syllab|termin|viri?)i$': {replace: '$1us', option: 'i'},
+    '([ftw]ax)es': {replace: '$1', option: 'i'},
+    '(cris|ax|test)es$': {replace: '$1is', option: 'i'},
+    '(shoe|slave)s$': {replace: '$1', option: 'i'},
+    '(o)es$': {replace: '$1', option: 'i'},
+    'ouses$/': 'ouse',
+    '([^a])uses$/': '$1us',
+    '([m|l])ice$': {replace: '$1ouse', option: 'i'},
+    '(x|ch|ss|sh)es$': {replace: '$1', option: 'i'},
+    '(m)ovies$': {replace: '$1$2ovie', option: 'i'},
+    '(s)eries$': {replace: '$1$2eries', option: 'i'},
+    '([^aeiouy]|qu)ies$': {replace: '$1y', option: 'i'},
+    '([lr])ves$': {replace: '$1f', option: 'i'},
+    '(tive)s$': {replace: '$1', option: 'i'},
+    '(hive)s$': {replace: '$1', option: 'i'},
+    '(drive)s$': {replace: '$1', option: 'i'},
+    '([^fo])ves$': {replace: '$1fe', option: 'i'},
+    '(^analy)ses$': {replace: '$1sis', option: 'i'},
+    '(analy|diagno|^ba|(p)arenthe|(p)rogno|(s)ynop|(t)he)ses$': {replace: '$1$2sis', option: 'i'},
+    '([ti])a$': {replace: '$1um', option: 'i'},
+    '(p)eople$': {replace: '$1$2erson', option: 'i'},
+    '(m)en$': {replace: '$1an', option: 'i'},
+    '(c)hildren$': {replace: '$1$2hild', option: 'i'},
+    '(n)ews$': {replace: '$1$2ews', option: 'i'},
+    'eaus$': {replace: 'eau'},
+    '^(.*us)$': {replace: '$\1'},
+    's$': {replace: '', option: 'i'},
 };
 
 /**
  * @var array the special rules for converting a word between its plural form and singular form.
  * The keys are the special words in singular form, and the values are the corresponding plural form.
  */
-const specials = {
+const SPECIALS = {
     'atlas': 'atlases',
     'beef': 'beefs',
     'brother': 'brothers',
@@ -209,7 +209,7 @@ const specials = {
 /**
  * @var array map of special chars and its translation. This is used by [[slug()]].
  */
-const transliteration = {
+const TRANSLITERATION = {
     // Latin
     'À': 'A', 'Á': 'A', 'Â': 'A', 'Ã': 'A', 'Ä': 'A', 'Å': 'A', 'Æ': 'AE', 'Ç': 'C',
     'È': 'E', 'É': 'E', 'Ê': 'E', 'Ë': 'E', 'Ì': 'I', 'Í': 'I', 'Î': 'I', 'Ï': 'I',
@@ -288,15 +288,15 @@ const Inflector = {
      * @return string the pluralized word
      */
     pluralize: function(word) {
-        if (this.specials[word])
-            return this.specials[word];
+        if (SPECIALS[word])
+            return SPECIALS[word];
 
-        for (let rule in this.plurals) {
-            const replacement = this.plurals[rule];
+        for (let rule in PLURALS) {
+            const replaceData = PLURALS[rule];
 
-            let match = word.match(new RegExp(rule, 'i'));
+            let match = word.match(new RegExp(rule, replaceData.option));
             if (match)
-                return word.replace(new RegExp(rule, 'i'), replacement);
+                return word.replace(new RegExp(rule, replaceData.option), replaceData.replace);
         }
         return word;
     },
@@ -306,15 +306,16 @@ const Inflector = {
      * @return string Singular noun.
      */
     singularize: function(word) {
-        const result = this.special[word];
+        const result = SPECIALS[word];
         if (result) {
             return result;
         }
-        for (let rule in this.singulars) {
-            const replacement = this.singulars[rule]
-            if (preg_match(rule, word)) {
-                return preg_replace(rule, replacement, word);
-            }
+        for (let rule in SINGULARS) {
+            const replaceData = SINGULARS[rule];
+
+            let match = word.match(new RegExp(rule, replaceData.option));
+            if (match)
+                return word.replace(new RegExp(rule, replaceData.option), replaceData.replace);
         }
         return word;
     },
@@ -473,4 +474,4 @@ const Inflector = {
     // }
 }
 
-module.default = Inflector;
+module.exports = Inflector;
