@@ -1,0 +1,476 @@
+/**
+ * PhInflector based on BaseInflector from Yii 2.0 - this is just a simple PHP 5.2 backport
+ *
+ * @author Antonio Ramirez <amigo.cobos@gmail.com>
+ * @author Tobias Munk <schmunk@usrbin.de>
+ * @author Kai Ziefle <k.ziefle@herzogkommunikation.de>
+ * @since 0.1
+ */
+
+/**
+ * @var array the rules for converting a word into its plural form.
+ * The keys are the regular expressions and the values are the corresponding replacements.
+ */
+const plurals = {
+    '([nrlm]ese|deer|fish|sheep|measles|ois|pox|media)': '$1',
+    '^(sea[- ]bass)': '$1',
+    '(m)ove': '$1oves',
+    '(f)oot': '$1eet',
+    '(h)uman': '$1umans',
+    '(s)tatus': '$1tatuses',
+    '(s)taff': '$1taff',
+    '(t)ooth': '$1eeth',
+    '(quiz)': '$1zes',
+    '^(ox)': '$1$2en',
+    '([m|l])ouse': '$1ice',
+    '(matr|vert|ind)(ix|ex)': '$1ices',
+    '(x|ch|ss|sh)': '$1es',
+    '([^aeiouy]|qu)y': '$1ies',
+    '(hive)': '$1s',
+    '(?:([^f])fe|([lr])f)': '$1$2ves',
+    'sis': 'ses',
+    '([ti])um': '$1a',
+    '(p)erson': '$1eople',
+    '(m)an': '$1en',
+    '(c)hild': '$1hildren',
+    '(buffal|tomat|potat|ech|her|vet)o': '$1oes',
+    '(alumn|bacill|cact|foc|fung|nucle|radi|stimul|syllab|termin|vir)us': '$1i',
+    'us': 'uses',
+    '(alias)': '$1es',
+    '(ax|cris|test)is': '$1es',
+    's': 's',
+    '^': '',
+    '': 's',
+};
+
+/**
+ * @var array the rules for converting a word into its singular form.
+ * The keys are the regular expressions and the values are the corresponding replacements.
+ */
+const singulars = {
+    '([nrlm]ese|deer|fish|sheep|measles|ois|pox|media|ss)': '$1',
+    '^(sea[- ]bass)': '$1',
+    '(s)tatuses': '$1tatus',
+    '(f)eet': '$1oot',
+    '(t)eeth': '$1ooth',
+    '^(.*)(menu)s': '$1$2',
+    '(quiz)zes': '\\1',
+    '(matr)ices': '$1ix',
+    '(vert|ind)ices': '$1ex',
+    '^(ox)en': '$1',
+    '(alias)(es)*': '$1',
+    '(alumn|bacill|cact|foc|fung|nucle|radi|stimul|syllab|termin|viri?)i': '$1us',
+    '([ftw]ax)es': '$1',
+    '(cris|ax|test)es': '$1is',
+    '(shoe|slave)s': '$1',
+    '(o)es': '$1',
+    'ouses': 'ouse',
+    '([^a])uses': '$1us',
+    '([m|l])ice': '$1ouse',
+    '(x|ch|ss|sh)es': '$1',
+    '(m)ovies': '$1$2ovie',
+    '(s)eries': '$1$2eries',
+    '([^aeiouy]|qu)ies': '$1y',
+    '([lr])ves': '$1f',
+    '(tive)s': '$1',
+    '(hive)s': '$1',
+    '(drive)s': '$1',
+    '([^fo])ves': '$1fe',
+    '(^analy)ses': '$1sis',
+    '(analy|diagno|^ba|(p)arenthe|(p)rogno|(s)ynop|(t)he)ses': '$1$2sis',
+    '([ti])a': '$1um',
+    '(p)eople': '$1$2erson',
+    '(m)en': '$1an',
+    '(c)hildren': '$1$2hild',
+    '(n)ews': '$1$2ews',
+    'eaus': 'eau',
+    '^(.*us)': '\\1',
+    's': '',
+};
+
+/**
+ * @var array the special rules for converting a word between its plural form and singular form.
+ * The keys are the special words in singular form, and the values are the corresponding plural form.
+ */
+const specials = {
+    'atlas': 'atlases',
+    'beef': 'beefs',
+    'brother': 'brothers',
+    'cafe': 'cafes',
+    'child': 'children',
+    'cookie': 'cookies',
+    'corpus': 'corpuses',
+    'cow': 'cows',
+    'curve': 'curves',
+    'foe': 'foes',
+    'ganglion': 'ganglions',
+    'genie': 'genies',
+    'genus': 'genera',
+    'graffito': 'graffiti',
+    'hoof': 'hoofs',
+    'loaf': 'loaves',
+    'man': 'men',
+    'money': 'monies',
+    'mongoose': 'mongooses',
+    'move': 'moves',
+    'mythos': 'mythoi',
+    'niche': 'niches',
+    'numen': 'numina',
+    'occiput': 'occiputs',
+    'octopus': 'octopuses',
+    'opus': 'opuses',
+    'ox': 'oxen',
+    'penis': 'penises',
+    'sex': 'sexes',
+    'soliloquy': 'soliloquies',
+    'testis': 'testes',
+    'trilby': 'trilbys',
+    'turf': 'turfs',
+    'wave': 'waves',
+    'Amoyese': 'Amoyese',
+    'bison': 'bison',
+    'Borghese': 'Borghese',
+    'bream': 'bream',
+    'breeches': 'breeches',
+    'britches': 'britches',
+    'buffalo': 'buffalo',
+    'cantus': 'cantus',
+    'carp': 'carp',
+    'chassis': 'chassis',
+    'clippers': 'clippers',
+    'cod': 'cod',
+    'coitus': 'coitus',
+    'Congoese': 'Congoese',
+    'contretemps': 'contretemps',
+    'corps': 'corps',
+    'debris': 'debris',
+    'diabetes': 'diabetes',
+    'djinn': 'djinn',
+    'eland': 'eland',
+    'elk': 'elk',
+    'equipment': 'equipment',
+    'Faroese': 'Faroese',
+    'flounder': 'flounder',
+    'Foochowese': 'Foochowese',
+    'gallows': 'gallows',
+    'Genevese': 'Genevese',
+    'Genoese': 'Genoese',
+    'Gilbertese': 'Gilbertese',
+    'graffiti': 'graffiti',
+    'headquarters': 'headquarters',
+    'herpes': 'herpes',
+    'hijinks': 'hijinks',
+    'Hottentotese': 'Hottentotese',
+    'information': 'information',
+    'innings': 'innings',
+    'jackanapes': 'jackanapes',
+    'Kiplingese': 'Kiplingese',
+    'Kongoese': 'Kongoese',
+    'Lucchese': 'Lucchese',
+    'mackerel': 'mackerel',
+    'Maltese': 'Maltese',
+    'mews': 'mews',
+    'moose': 'moose',
+    'mumps': 'mumps',
+    'Nankingese': 'Nankingese',
+    'news': 'news',
+    'nexus': 'nexus',
+    'Niasese': 'Niasese',
+    'Pekingese': 'Pekingese',
+    'Piedmontese': 'Piedmontese',
+    'pincers': 'pincers',
+    'Pistoiese': 'Pistoiese',
+    'pliers': 'pliers',
+    'Portuguese': 'Portuguese',
+    'proceedings': 'proceedings',
+    'rabies': 'rabies',
+    'rice': 'rice',
+    'rhinoceros': 'rhinoceros',
+    'salmon': 'salmon',
+    'Sarawakese': 'Sarawakese',
+    'scissors': 'scissors',
+    'series': 'series',
+    'Shavese': 'Shavese',
+    'shears': 'shears',
+    'siemens': 'siemens',
+    'species': 'species',
+    'swine': 'swine',
+    'testes': 'testes',
+    'trousers': 'trousers',
+    'trout': 'trout',
+    'tuna': 'tuna',
+    'Vermontese': 'Vermontese',
+    'Wenchowese': 'Wenchowese',
+    'whiting': 'whiting',
+    'wildebeest': 'wildebeest',
+    'Yengeese': 'Yengeese',
+};
+
+/**
+ * @var array map of special chars and its translation. This is used by [[slug()]].
+ */
+const transliteration = {
+    // Latin
+    'À': 'A', 'Á': 'A', 'Â': 'A', 'Ã': 'A', 'Ä': 'A', 'Å': 'A', 'Æ': 'AE', 'Ç': 'C',
+    'È': 'E', 'É': 'E', 'Ê': 'E', 'Ë': 'E', 'Ì': 'I', 'Í': 'I', 'Î': 'I', 'Ï': 'I',
+    'Ð': 'D', 'Ñ': 'N', 'Ò': 'O', 'Ó': 'O', 'Ô': 'O', 'Õ': 'O', 'Ö': 'O', 'Ő': 'O',
+    'Ø': 'O', 'Ù': 'U', 'Ú': 'U', 'Û': 'U', 'Ü': 'U', 'Ű': 'U', 'Ý': 'Y', 'Þ': 'TH',
+    'ß': 'ss',
+    'à': 'a', 'á': 'a', 'â': 'a', 'ã': 'a', 'ä': 'a', 'å': 'a', 'æ': 'ae', 'ç': 'c',
+    'è': 'e', 'é': 'e', 'ê': 'e', 'ë': 'e', 'ì': 'i', 'í': 'i', 'î': 'i', 'ï': 'i',
+    'ð': 'd', 'ñ': 'n', 'ò': 'o', 'ó': 'o', 'ô': 'o', 'õ': 'o', 'ö': 'o', 'ő': 'o',
+    'ø': 'o', 'ù': 'u', 'ú': 'u', 'û': 'u', 'ü': 'u', 'ű': 'u', 'ý': 'y', 'þ': 'th',
+    'ÿ': 'y',
+    // Latin symbols
+    '©': '(c)',
+    // Greek
+    'Α': 'A', 'Β': 'B', 'Γ': 'G', 'Δ': 'D', 'Ε': 'E', 'Ζ': 'Z', 'Η': 'H', 'Θ': '8',
+    'Ι': 'I', 'Κ': 'K', 'Λ': 'L', 'Μ': 'M', 'Ν': 'N', 'Ξ': '3', 'Ο': 'O', 'Π': 'P',
+    'Ρ': 'R', 'Σ': 'S', 'Τ': 'T', 'Υ': 'Y', 'Φ': 'F', 'Χ': 'X', 'Ψ': 'PS', 'Ω': 'W',
+    'Ά': 'A', 'Έ': 'E', 'Ί': 'I', 'Ό': 'O', 'Ύ': 'Y', 'Ή': 'H', 'Ώ': 'W', 'Ϊ': 'I',
+    'Ϋ': 'Y',
+    'α': 'a', 'β': 'b', 'γ': 'g', 'δ': 'd', 'ε': 'e', 'ζ': 'z', 'η': 'h', 'θ': '8',
+    'ι': 'i', 'κ': 'k', 'λ': 'l', 'μ': 'm', 'ν': 'n', 'ξ': '3', 'ο': 'o', 'π': 'p',
+    'ρ': 'r', 'σ': 's', 'τ': 't', 'υ': 'y', 'φ': 'f', 'χ': 'x', 'ψ': 'ps', 'ω': 'w',
+    'ά': 'a', 'έ': 'e', 'ί': 'i', 'ό': 'o', 'ύ': 'y', 'ή': 'h', 'ώ': 'w', 'ς': 's',
+    'ϊ': 'i', 'ΰ': 'y', 'ϋ': 'y', 'ΐ': 'i',
+    // Turkish
+    'Ş': 'S', 'İ': 'I', 'Ç': 'C', 'Ü': 'U', 'Ö': 'O', 'Ğ': 'G',
+    'ş': 's', 'ı': 'i', 'ç': 'c', 'ü': 'u', 'ö': 'o', 'ğ': 'g',
+    // Russian
+    'А': 'A', 'Б': 'B', 'В': 'V', 'Г': 'G', 'Д': 'D', 'Е': 'E', 'Ё': 'Yo', 'Ж': 'Zh',
+    'З': 'Z', 'И': 'I', 'Й': 'J', 'К': 'K', 'Л': 'L', 'М': 'M', 'Н': 'N', 'О': 'O',
+    'П': 'P', 'Р': 'R', 'С': 'S', 'Т': 'T', 'У': 'U', 'Ф': 'F', 'Х': 'H', 'Ц': 'C',
+    'Ч': 'Ch', 'Ш': 'Sh', 'Щ': 'Sh', 'Ъ': '', 'Ы': 'Y', 'Ь': '', 'Э': 'E', 'Ю': 'Yu',
+    'Я': 'Ya',
+    'а': 'a', 'б': 'b', 'в': 'v', 'г': 'g', 'д': 'd', 'е': 'e', 'ё': 'yo', 'ж': 'zh',
+    'з': 'z', 'и': 'i', 'й': 'j', 'к': 'k', 'л': 'l', 'м': 'm', 'н': 'n', 'о': 'o',
+    'п': 'p', 'р': 'r', 'с': 's', 'т': 't', 'у': 'u', 'ф': 'f', 'х': 'h', 'ц': 'c',
+    'ч': 'ch', 'ш': 'sh', 'щ': 'sh', 'ъ': '', 'ы': 'y', 'ь': '', 'э': 'e', 'ю': 'yu',
+    'я': 'ya',
+    // Ukrainian
+    'Є': 'Ye', 'І': 'I', 'Ї': 'Yi', 'Ґ': 'G',
+    'є': 'ye', 'і': 'i', 'ї': 'yi', 'ґ': 'g',
+    // Czech
+    'Č': 'C', 'Ď': 'D', 'Ě': 'E', 'Ň': 'N', 'Ř': 'R', 'Š': 'S', 'Ť': 'T', 'Ů': 'U',
+    'Ž': 'Z',
+    'č': 'c', 'ď': 'd', 'ě': 'e', 'ň': 'n', 'ř': 'r', 'š': 's', 'ť': 't', 'ů': 'u',
+    'ž': 'z',
+    // Polish
+    'Ą': 'A', 'Ć': 'C', 'Ę': 'e', 'Ł': 'L', 'Ń': 'N', 'Ó': 'o', 'Ś': 'S', 'Ź': 'Z',
+    'Ż': 'Z',
+    'ą': 'a', 'ć': 'c', 'ę': 'e', 'ł': 'l', 'ń': 'n', 'ó': 'o', 'ś': 's', 'ź': 'z',
+    'ż': 'z',
+    // Latvian
+    'Ā': 'A', 'Č': 'C', 'Ē': 'E', 'Ģ': 'G', 'Ī': 'i', 'Ķ': 'k', 'Ļ': 'L', 'Ņ': 'N',
+    'Š': 'S', 'Ū': 'u', 'Ž': 'Z',
+    'ā': 'a', 'č': 'c', 'ē': 'e', 'ģ': 'g', 'ī': 'i', 'ķ': 'k', 'ļ': 'l', 'ņ': 'n',
+    'š': 's', 'ū': 'u', 'ž': 'z',
+    //Vietnamese
+    'Ấ': 'A', 'Ầ': 'A', 'Ẩ': 'A', 'Ẫ': 'A', 'Ậ': 'A',
+    'Ắ': 'A', 'Ằ': 'A', 'Ẳ': 'A', 'Ẵ': 'A', 'Ặ': 'A',
+    'Ố': 'O', 'Ồ': 'O', 'Ổ': 'O', 'Ỗ': 'O', 'Ộ': 'O',
+    'Ớ': 'O', 'Ờ': 'O', 'Ở': 'O', 'Ỡ': 'O', 'Ợ': 'O',
+    'Ế': 'E', 'Ề': 'E', 'Ể': 'E', 'Ễ': 'E', 'Ệ': 'E',
+    'ấ': 'a', 'ầ': 'a', 'ẩ': 'a', 'ẫ': 'a', 'ậ': 'a',
+    'ắ': 'a', 'ằ': 'a', 'ẳ': 'a', 'ẵ': 'a', 'ặ': 'a',
+    'ố': 'o', 'ồ': 'o', 'ổ': 'o', 'ỗ': 'o', 'ộ': 'o',
+    'ớ': 'o', 'ờ': 'o', 'ở': 'o', 'ỡ': 'o', 'ợ': 'o',
+    'ế': 'e', 'ề': 'e', 'ể': 'e', 'ễ': 'e', 'ệ': 'e'
+};
+
+const Inflector = {
+    /**
+     * Converts a word to its plural form.
+     * Note that this is for English only!
+     * For example, 'apple' will become 'apples', and 'child' will become 'children'.
+     * @param string word the word to be pluralized
+     * @return string the pluralized word
+     */
+    pluralize: function(word) {
+        if (this.specials[word])
+            return this.specials[word];
+
+        for (let rule in this.plurals) {
+            const replacement = this.plurals[rule];
+
+            let match = word.match(new RegExp(rule, 'i'));
+            if (match)
+                return word.replace(new RegExp(rule, 'i'), replacement);
+        }
+        return word;
+    },
+    /**
+     * Returns the singular of the word
+     * @param string word the english word to singularize
+     * @return string Singular noun.
+     */
+    singularize: function(word) {
+        const result = this.special[word];
+        if (result) {
+            return result;
+        }
+        for (let rule in this.singulars) {
+            const replacement = this.singulars[rule]
+            if (preg_match(rule, word)) {
+                return preg_replace(rule, replacement, word);
+            }
+        }
+        return word;
+    },
+    // /**
+    //  * Converts an underscored or CamelCase word into a English
+    //  * sentence.
+    //  * @param string words
+    //  * @param boolean ucAll whether to set all words to uppercase
+    //  * @return string
+    //  */
+    // titleize: function(words, ucAll = false) {
+    //     words = this.humanize(this.underscore(words), ucAll);
+    //     return ucAll ? ucwords(words) : ucfirst(words);
+    // },
+    // /**
+    //  * Returns given word as CamelCased
+    //  * Converts a word like "send_email" to "SendEmail". It
+    //  * will remove non alphanumeric character from the word, so
+    //  * "who's online" will be converted to "WhoSOnline"
+    //  * @see variablize()
+    //  * @param string word the word to CamelCase
+    //  * @return string
+    //  */
+    // camelize: function(word)
+    // {
+    //     return str_replace(' ', '', ucwords(preg_replace('/[^A-Za-z0-9]+/', ' ', word)));
+    // },
+    // /**
+    //  * Converts a CamelCase name into space-separated words.
+    //  * For example, 'PostTag' will be converted to 'Post Tag'.
+    //  * @param string name the string to be converted
+    //  * @param boolean ucwords whether to capitalize the first letter in each word
+    //  * @return string the resulting words
+    //  */
+    // camel2words: function(name, ucwords = true)
+    // {
+    //     label = trim(strtolower(str_replace({
+    //         '-',
+    //         '_',
+    //         '.'
+    //     ), ' ', preg_replace('/(?<![A-Z])[A-Z]/', ' \0', name))));
+    //     return ucwords ? ucwords(label) : label;
+    // },
+    // /**
+    //  * Converts a CamelCase name into an ID in lowercase.
+    //  * Words in the ID may be concatenated using the specified character (defaults to '-').
+    //  * For example, 'PostTag' will be converted to 'post-tag'.
+    //  * @param string name the string to be converted
+    //  * @param string separator the character used to concatenate the words in the ID
+    //  * @return string the resulting ID
+    //  */
+    // camel2id: function(name, separator = '-')
+    // {
+    //     if (separator === '_') {
+    //         return trim(strtolower(preg_replace('/(?<![A-Z])[A-Z]/', '_\0', name)), '_');
+    //     } else {
+    //         return trim(strtolower(str_replace('_', separator, preg_replace('/(?<![A-Z])[A-Z]/', separator . '\0', name))), separator);
+    //     }
+    // },
+    // /**
+    //  * Converts an ID into a CamelCase name.
+    //  * Words in the ID separated by `separator` (defaults to '-') will be concatenated into a CamelCase name.
+    //  * For example, 'post-tag' is converted to 'PostTag'.
+    //  * @param string id the ID to be converted
+    //  * @param string separator the character used to separate the words in the ID
+    //  * @return string the resulting CamelCase name
+    //  */
+    // id2camel: function(id, separator = '-')
+    // {
+    //     return str_replace(' ', '', ucwords(implode(' ', explode(separator, id))));
+    // },
+    // /**
+    //  * Converts any "CamelCased" into an "underscored_word".
+    //  * @param string words the word(s) to underscore
+    //  * @return string
+    //  */
+    // underscore: function(words)
+    // {
+    //     return strtolower(preg_replace('/(?<=\\w)([A-Z])/', '_\\1', words));
+    // },
+    // /**
+    //  * Returns a human-readable string from word
+    //  * @param string word the string to humanize
+    //  * @param boolean ucAll whether to set all words to uppercase or not
+    //  * @return string
+    //  */
+    // humanize: function(word, ucAll = false)
+    // {
+    //     word = str_replace('_', ' ', preg_replace('/_id/', '', word));
+    //     return ucAll ? ucwords(word) : ucfirst(word);
+    // },
+    // /**
+    //  * Same as camelize but first char is in lowercase.
+    //  * Converts a word like "send_email" to "sendEmail". It
+    //  * will remove non alphanumeric character from the word, so
+    //  * "who's online" will be converted to "whoSOnline"
+    //  * @param string word to lowerCamelCase
+    //  * @return string
+    //  */
+    // variablize: function(word)
+    // {
+    //     word = this.camelize(word);
+    //     return strtolower(word[0]) . substr(word, 1);
+    // },
+    // /**
+    //  * Converts a class name to its table name (pluralized)
+    //  * naming conventions. For example, converts "Person" to "people"
+    //  * @param string className the class name for getting related table_name
+    //  * @return string
+    //  */
+    // tableize: function(className)
+    // {
+    //     return this.pluralize(this.underscore(className));
+    // },
+    // /**
+    //  * Returns a string with all spaces converted to given replacement and
+    //  * non word characters removed.  Maps special characters to ASCII using
+    //  * [[transliteration]] array.
+    //  * @param string string An arbitrary string to convert
+    //  * @param string replacement The replacement to use for spaces
+    //  * @param boolean lowercase whether to return the string in lowercase or not. Defaults to `true`.
+    //  * @return string The converted string.
+    //  */
+    // slug: function(string, replacement = '-', lowercase = true)
+    // {
+    //     string = str_replace(array_keys(this.transliteration), this.transliteration, string);
+    //     string = preg_replace('/[^\p{L}\p{Nd}]+/u', replacement, string);
+    //     string = trim(string, replacement);
+    //     return lowercase ? strtolower(string) : string;
+    // },
+    // /**
+    //  * Converts a table name to its class name. For example, converts "people" to "Person"
+    //  * @param string tableName
+    //  * @return string
+    //  */
+    // classify: function(tableName)
+    // {
+    //     return this.camelize(this.singularize(tableName));
+    // },
+    // /**
+    //  * Converts number to its ordinal English form. For example, converts 13 to 13th, 2 to 2nd ...
+    //  * @param integer number the number to get its ordinal value
+    //  * @return string
+    //  */
+    // ordinalize: function(number)
+    // {
+    //     if (in_(number % 100), range(11, 13)) {
+    //         return number . 'th';
+    //     }
+    //     switch (number % 10) {
+    //         case 1: return number . 'st';
+    //         case 2: return number . 'nd';
+    //         case 3: return number . 'rd';
+    //         default: return number . 'th';
+    //     }
+    // }
+}
+
+module.default = Inflector;
