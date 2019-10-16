@@ -204,6 +204,15 @@ const SPECIALS = {
     'whiting': 'whiting',
     'wildebeest': 'wildebeest',
     'Yengeese': 'Yengeese',
+    'aircraft': 'aircraft',
+    'alumna': 'alumnae',
+    'fez': 'fezes',
+    'goose': 'geese',
+    'locus': 'loci',
+    'minutia': 'minutiae',
+    'ovum': 'ova',
+    'phylum': 'phyla',
+    'thief': 'thieves',
 };
 
 /**
