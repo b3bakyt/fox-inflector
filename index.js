@@ -422,8 +422,8 @@ const Inflector = {
      */
     humanize: function(word, ucAll = false)
     {
-        word = str_replace('_', ' ', preg_replace('/_id/', '', word));
-        return ucAll ? ucwords(word) : ucfirst(word);
+        let words = word.replace(/_id/, '').replace(/_/g, ' ');
+        return ucAll ? words.toUpperCase() : words.charAt(0).toUpperCase() + words.slice(1);
     },
 
     // /**
