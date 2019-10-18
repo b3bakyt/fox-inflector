@@ -9,9 +9,9 @@ const {
 
 describe('titleize tests', () => {
     it('The function titleize should convert CamelCase to english sentence', (done) => {
-        expect(Inflector.titleize('TestWord')).equal('test word');
-        expect(Inflector.titleize('testWord_Hello')).equal('test word hello');
-        expect(Inflector.titleize('TestWord-Hello123Hi')).equal('test word hello123 hi');
+        expect(Inflector.titleize('TestWord')).equal('Test word');
+        expect(Inflector.titleize('testWord_Hello')).equal('Test word  hello');
+        expect(Inflector.titleize('TestWord-Hello123Hi', true)).equal('TEST WORD-HELLO123 HI');
         done();
     });
 });

@@ -343,7 +343,7 @@ const Inflector = {
      */
     titleize: function(words, ucAll = false) {
         words = this.humanize(this.underscore(words), ucAll);
-        return ucAll ? ucwords(words) : ucfirst(words);
+        return ucAll ? words.toUpperCase() : words.charAt(0).toUpperCase() + words.slice(1);
     },
 
     // /**
