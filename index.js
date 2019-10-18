@@ -364,22 +364,25 @@ const Inflector = {
             .join('');
     },
 
-    // /**
-    //  * Converts a CamelCase name into space-separated words.
-    //  * For example, 'PostTag' will be converted to 'Post Tag'.
-    //  * @param string name the string to be converted
-    //  * @param boolean ucwords whether to capitalize the first letter in each word
-    //  * @return string the resulting words
-    //  */
-    // camel2words: function(name, ucwords = true)
-    // {
-    //     label = trim(strtolower(str_replace({
-    //         '-',
-    //         '_',
-    //         '.'
-    //     ), ' ', preg_replace('/(?<![A-Z])[A-Z]/', ' \0', name))));
-    //     return ucwords ? ucwords(label) : label;
-    // },
+    /**
+     * Converts a CamelCase name into space-separated words.
+     * For example, 'PostTag' will be converted to 'Post Tag'.
+     * @param string name the string to be converted
+     * @param boolean ucwords whether to capitalize the first letter in each word
+     * @return string the resulting words
+     */
+    camel2words: function(name, ucwords = true)
+    {
+        return name.replace(/([A-Z])/g, ' $1')
+            .replace(/([\-\_\.])/g, ' ')
+            .replace(/(  )/g, ' ')
+            .toLowerCase()
+            .trim()
+            .split(' ')
+            .map(val => ucwords ? val.charAt(0).toUpperCase() + val.slice(1) : val)
+            .join(' ');
+    },
+
     // /**
     //  * Converts a CamelCase name into an ID in lowercase.
     //  * Words in the ID may be concatenated using the specified character (defaults to '-').
