@@ -414,17 +414,18 @@ const Inflector = {
         return words.replace(new RegExp('(?<=\\w)([A-Z])', 'g'), '_$1').toLowerCase();
     },
 
-    // /**
-    //  * Returns a human-readable string from word
-    //  * @param string word the string to humanize
-    //  * @param boolean ucAll whether to set all words to uppercase or not
-    //  * @return string
-    //  */
-    // humanize: function(word, ucAll = false)
-    // {
-    //     word = str_replace('_', ' ', preg_replace('/_id/', '', word));
-    //     return ucAll ? ucwords(word) : ucfirst(word);
-    // },
+    /**
+     * Returns a human-readable string from word
+     * @param string word the string to humanize
+     * @param boolean ucAll whether to set all words to uppercase or not
+     * @return string
+     */
+    humanize: function(word, ucAll = false)
+    {
+        word = str_replace('_', ' ', preg_replace('/_id/', '', word));
+        return ucAll ? ucwords(word) : ucfirst(word);
+    },
+
     // /**
     //  * Same as camelize but first char is in lowercase.
     //  * Converts a word like "send_email" to "sendEmail". It
