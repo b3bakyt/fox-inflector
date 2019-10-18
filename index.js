@@ -334,17 +334,18 @@ const Inflector = {
         return word;
     },
 
-    // /**
-    //  * Converts an underscored or CamelCase word into a English
-    //  * sentence.
-    //  * @param string words
-    //  * @param boolean ucAll whether to set all words to uppercase
-    //  * @return string
-    //  */
-    // titleize: function(words, ucAll = false) {
-    //     words = this.humanize(this.underscore(words), ucAll);
-    //     return ucAll ? ucwords(words) : ucfirst(words);
-    // },
+    /**
+     * Converts an underscored or CamelCase word into a English
+     * sentence.
+     * @param string words
+     * @param boolean ucAll whether to set all words to uppercase
+     * @return string
+     */
+    titleize: function(words, ucAll = false) {
+        words = this.humanize(this.underscore(words), ucAll);
+        return ucAll ? ucwords(words) : ucfirst(words);
+    },
+
     // /**
     //  * Returns given word as CamelCased
     //  * Converts a word like "send_email" to "SendEmail". It
@@ -402,15 +403,17 @@ const Inflector = {
     // {
     //     return str_replace(' ', '', ucwords(implode(' ', explode(separator, id))));
     // },
-    // /**
-    //  * Converts any "CamelCased" into an "underscored_word".
-    //  * @param string words the word(s) to underscore
-    //  * @return string
-    //  */
-    // underscore: function(words)
-    // {
-    //     return strtolower(preg_replace('/(?<=\\w)([A-Z])/', '_\\1', words));
-    // },
+
+    /**
+     * Converts any "CamelCased" into an "underscored_word".
+     * @param string words the word(s) to underscore
+     * @return string
+     */
+    underscore: function(words)
+    {
+        return words.replace(new RegExp('(?<=\\w)([A-Z])', 'g'), '_$1').toLowerCase();
+    },
+
     // /**
     //  * Returns a human-readable string from word
     //  * @param string word the string to humanize
