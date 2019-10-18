@@ -357,7 +357,11 @@ const Inflector = {
      */
     camelize: function(word)
     {
-        return str_replace(' ', '', ucwords(preg_replace('/[^A-Za-z0-9]+/', ' ', word)));
+        return word
+            .replace(/[^A-Za-z0-9]+/ig, ' ')
+            .split(' ')
+            .map(val => val.charAt(0).toUpperCase() + val.slice(1))
+            .join('');
     },
 
     // /**
