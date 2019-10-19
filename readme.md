@@ -1,5 +1,5 @@
 # Inflector 
-is a small library that can perform string manipulations with regard to uppercase/lowercase and singular/plural forms of words.
+The library supplies functions to perform string manipulations with regard to uppercase/lowercase and singular/plural forms of words.
 
 ### Installation
 
@@ -13,7 +13,10 @@ npm install fox-inflector
 Returns the plural of the word
 ```
 pluralize('ox');       // oxen
-pluralize('apple');    // apples
+```
+same function might be used as: (This is applicable for all functions)
+```
+'apple'.pluralize();   // apples
 ```
 #### singularize
 Returns the singular of the word
