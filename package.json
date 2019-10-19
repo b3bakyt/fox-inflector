@@ -1,7 +1,7 @@
 {
-  "name": "inflector",
+  "name": "fox-inflector",
   "version": "1.0.0",
-  "description": "",
+  "description": "library that can perform string manipulations",
   "main": "index.js",
   "devDependencies": {
     "chai": "^4.2.0",

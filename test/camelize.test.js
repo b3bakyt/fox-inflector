@@ -12,6 +12,7 @@ describe('camelize tests', () => {
         expect(Inflector.camelize('test_word_id')).equal('TestWordId');
         expect(Inflector.camelize('user_group_states')).equal('UserGroupStates');
         expect(Inflector.camelize('user_group_states123', true)).equal('UserGroupStates123');
+        expect(Inflector.camelize('test#&case', true)).equal('TestCase');
         done();
     });
 });
