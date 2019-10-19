@@ -68,8 +68,8 @@ const SINGULARS = {
     '([^a])uses$/': '$1us',
     '([m|l])ice$': {replace: '$1ouse', option: 'i'},
     '(x|ch|ss|sh)es$': {replace: '$1', option: 'i'},
-    '(m)ovies$': {replace: '$1$2ovie', option: 'i'},
-    '(s)eries$': {replace: '$1$2eries', option: 'i'},
+    '(m)ovies$': {replace: '$1ovie', option: 'i'},
+    '(s)eries$': {replace: '$1eries', option: 'i'},
     '([^aeiouy]|qu)ies$': {replace: '$1y', option: 'i'},
     '([lr])ves$': {replace: '$1f', option: 'i'},
     '(tive)s$': {replace: '$1', option: 'i'},
@@ -77,12 +77,12 @@ const SINGULARS = {
     '(drive)s$': {replace: '$1', option: 'i'},
     '([^fo])ves$': {replace: '$1fe', option: 'i'},
     '(^analy)ses$': {replace: '$1sis', option: 'i'},
-    '(analy|diagno|^ba|(p)arenthe|(p)rogno|(s)ynop|(t)he)ses$': {replace: '$1$2sis', option: 'i'},
+    '(analy|diagno|^ba|(p)arenthe|(p)rogno|(s)ynop|(t)he)ses$': {replace: '$1sis', option: 'i'},
     '([ti])a$': {replace: '$1um', option: 'i'},
-    '(p)eople$': {replace: '$1$2erson', option: 'i'},
+    '(p)eople$': {replace: '$1erson', option: 'i'},
     '(m)en$': {replace: '$1an', option: 'i'},
-    '(c)hildren$': {replace: '$1$2hild', option: 'i'},
-    '(n)ews$': {replace: '$1$2ews', option: 'i'},
+    '(c)hildren$': {replace: '$1hild', option: 'i'},
+    '(n)ews$': {replace: '$1ews', option: 'i'},
     'eaus$': {replace: 'eau'},
     '^(.*us)$': {replace: '$\1'},
     's$': {replace: '', option: 'i'},
@@ -314,6 +314,7 @@ const Inflector = {
         }
         return word;
     },
+
     /**
      * Returns the singular of the word
      * @param string word the english word to singularize
@@ -488,21 +489,22 @@ const Inflector = {
             .replace(/\s/g, replacement);
 
         return lowercase ? result.toLowerCase() : result;
-        // string = str_replace(array_keys(TRANSLITERATION), this.transliteration, string);
-        // string = preg_replace('/[^\p{L}\p{Nd}]+/u', replacement, string);
-        // string = trim(string, replacement);
-        // return lowercase ? strtolower(string) : string;
     },
 
-    // /**
-    //  * Converts a table name to its class name. For example, converts "people" to "Person"
-    //  * @param string tableName
-    //  * @return string
-    //  */
-    // classify: function(tableName)
-    // {
-    //     return this.camelize(this.singularize(tableName));
-    // },
+    /**
+     * Converts a table name to its class name. For example, converts "people" to "Person"
+     * @param string tableName
+     * @return string
+     */
+    classify: function(tableName)
+    {
+        return tableName
+            .split('_')
+            .map(val => this.singularize(val))
+            .map(val => val.charAt(0).toUpperCase() + val.slice(1))
+            .join('');
+    },
+
     // /**
     //  * Converts number to its ordinal English form. For example, converts 13 to 13th, 2 to 2nd ...
     //  * @param integer number the number to get its ordinal value
