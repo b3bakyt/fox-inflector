@@ -478,15 +478,16 @@ const Inflector = {
     */
     slug: function(string, replacement = '-', lowercase = true)
     {
-        return string
+        const result = string
             .split('')
             .map(char => TRANSLITERATION[char] && TRANSLITERATION[char] || char)
-            .join('').toLowerCase()
+            .join('')
             .replace(/[^a-z0-9]+/gi, ' ')
             .trim()
             .replace(/[\s]+/g, ' ')
             .replace(/\s/g, replacement);
 
+        return lowercase ? result.toLowerCase() : result;
         // string = str_replace(array_keys(TRANSLITERATION), this.transliteration, string);
         // string = preg_replace('/[^\p{L}\p{Nd}]+/u', replacement, string);
         // string = trim(string, replacement);
