@@ -479,6 +479,9 @@ const Inflector = {
     slug: function(string, replacement = '-', lowercase = true)
     {
         return string
+            .split('')
+            .map(char => TRANSLITERATION[char] && TRANSLITERATION[char] || char)
+            .join('').toLowerCase()
             .replace(/[^a-z0-9]+/gi, ' ')
             .trim()
             .replace(/[\s]+/g, ' ')
