@@ -467,22 +467,23 @@ const Inflector = {
         return this.pluralize(this.underscore(className));
     },
 
-    // /**
-    //  * Returns a string with all spaces converted to given replacement and
-    //  * non word characters removed.  Maps special characters to ASCII using
-    //  * [[transliteration]] array.
-    //  * @param string string An arbitrary string to convert
-    //  * @param string replacement The replacement to use for spaces
-    //  * @param boolean lowercase whether to return the string in lowercase or not. Defaults to `true`.
-    //  * @return string The converted string.
-    //  */
-    // slug: function(string, replacement = '-', lowercase = true)
-    // {
-    //     string = str_replace(array_keys(this.transliteration), this.transliteration, string);
-    //     string = preg_replace('/[^\p{L}\p{Nd}]+/u', replacement, string);
-    //     string = trim(string, replacement);
-    //     return lowercase ? strtolower(string) : string;
-    // },
+    /**
+    * Returns a string with all spaces converted to given replacement and
+    * non word characters removed.  Maps special characters to ASCII using
+    * [[transliteration]] array.
+    * @param string string An arbitrary string to convert
+    * @param string replacement The replacement to use for spaces
+    * @param boolean lowercase whether to return the string in lowercase or not. Defaults to `true`.
+    * @return string The converted string.
+    */
+    slug: function(string, replacement = '-', lowercase = true)
+    {
+        string = str_replace(array_keys(TRANSLITERATION), this.transliteration, string);
+        string = preg_replace('/[^\p{L}\p{Nd}]+/u', replacement, string);
+        string = trim(string, replacement);
+        return lowercase ? strtolower(string) : string;
+    },
+
     // /**
     //  * Converts a table name to its class name. For example, converts "people" to "Person"
     //  * @param string tableName
