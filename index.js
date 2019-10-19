@@ -1,10 +1,7 @@
 /**
- * PhInflector based on BaseInflector from Yii 2.0 - this is just a simple PHP 5.2 backport
+ * Fox-Inflector based on PhInflector from amigo.cobos@gmail.com - this is just a simple JS backport
  *
- * @author Antonio Ramirez <amigo.cobos@gmail.com>
- * @author Tobias Munk <schmunk@usrbin.de>
- * @author Kai Ziefle <k.ziefle@herzogkommunikation.de>
- * @since 0.1
+ * @author Bob Slave <b3bakyt@gmail.com>
  */
 
 /**
@@ -536,6 +533,108 @@ const Inflector = {
             default: return number + 'th';
         }
     }
-}
+};
+
+const warn = funcName =>
+    'Be aware! String.prototype.{0} already exists. Fox-Inflector lib will not replace it, so str.{0}() won\'t work as expected!'.replace(/\{0\}/g, funcName);
+
+// First, checks if it isn't implemented yet.
+if (!String.prototype.pluralize)
+    String.prototype.pluralize = function() {
+        return Inflector.pluralize(''+ this);
+    };
+else
+    console.warn(warn('pluralize'));
+
+if (!String.prototype.singularize)
+    String.prototype.singularize = function() {
+        return Inflector.singularize(''+ this);
+    };
+else
+    console.warn(warn('singularize'));
+
+if (!String.prototype.titleize)
+    String.prototype.titleize = function(ucAll = false) {
+        return Inflector.titleize(''+ this, ucAll);
+    };
+else
+    console.warn(warn('titleize'));
+
+if (!String.prototype.camelize)
+    String.prototype.camelize = function() {
+        return Inflector.camelize(''+ this);
+    };
+else
+    console.warn(warn('camelize'));
+
+if (!String.prototype.camel2words)
+    String.prototype.camel2words = function(ucwords = true) {
+        return Inflector.camel2words(''+ this, ucwords);
+    };
+else
+    console.warn(warn('camel2words'));
+
+if (!String.prototype.camel2id)
+    String.prototype.camel2id = function(separator = '-') {
+        return Inflector.camel2id(''+ this, separator);
+    };
+else
+    console.warn(warn('camel2id'));
+
+if (!String.prototype.id2camel)
+    String.prototype.id2camel = function(separator = '-') {
+        return Inflector.id2camel(''+ this, separator);
+    };
+else
+    console.warn(warn('id2camel'));
+
+if (!String.prototype.underscore)
+    String.prototype.underscore = function() {
+        return Inflector.underscore(''+ this);
+    };
+else
+    console.warn(warn('underscore'));
+
+if (!String.prototype.humanize)
+    String.prototype.humanize = function(ucAll = false) {
+        return Inflector.humanize(''+ this, ucAll);
+    };
+else
+    console.warn(warn('humanize'));
+
+if (!String.prototype.variablize)
+    String.prototype.variablize = function() {
+        return Inflector.variablize(''+ this);
+    };
+else
+    console.warn(warn('variablize'));
+
+if (!String.prototype.tableize)
+    String.prototype.tableize = function() {
+        return Inflector.tableize(''+ this);
+    };
+else
+    console.warn(warn('tableize'));
+
+if (!String.prototype.slug)
+    String.prototype.slug = function(replacement = '-', lowercase = true) {
+        return Inflector.slug(''+ this, replacement, lowercase);
+    };
+else
+    console.warn(warn('slug'));
+
+if (!String.prototype.classify)
+    String.prototype.classify = function() {
+        return Inflector.classify(''+ this);
+    };
+else
+    console.warn(warn('classify'));
+
+if (!String.prototype.ordinalize)
+    String.prototype.ordinalize = function() {
+        return Inflector.ordinalize(''+ this);
+    };
+else
+    console.warn(warn('ordinalize'));
 
 module.exports = Object.freeze(Inflector);
