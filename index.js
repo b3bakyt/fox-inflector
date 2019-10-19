@@ -435,7 +435,12 @@ const Inflector = {
      */
     underscore: function(words)
     {
-        return words.replace(new RegExp('(?<=\\w)([A-Z])', 'g'), '_$1').toLowerCase();
+        const res = words
+            .replace(new RegExp('(?<=\\w)([A-Z])', 'g'), ' $1')
+            .replace('_', ' ')
+            .replace(/(\s+)/g, '_')
+            .toLowerCase();
+        return res;
     },
 
     /**
