@@ -442,19 +442,20 @@ const Inflector = {
         return ucAll ? words.toUpperCase() : words.charAt(0).toUpperCase() + words.slice(1);
     },
 
-    // /**
-    //  * Same as camelize but first char is in lowercase.
-    //  * Converts a word like "send_email" to "sendEmail". It
-    //  * will remove non alphanumeric character from the word, so
-    //  * "who's online" will be converted to "whoSOnline"
-    //  * @param string word to lowerCamelCase
-    //  * @return string
-    //  */
-    // variablize: function(word)
-    // {
-    //     word = this.camelize(word);
-    //     return strtolower(word[0]) . substr(word, 1);
-    // },
+    /**
+     * Same as camelize but first char is in lowercase.
+     * Converts a word like "send_email" to "sendEmail". It
+     * will remove non alphanumeric character from the word, so
+     * "who's online" will be converted to "whoSOnline"
+     * @param string word to lowerCamelCase
+     * @return string
+     */
+    variablize: function(word)
+    {
+        word = this.camelize(word);
+        return word.charAt(0).toLowerCase() + word.slice(1);
+    },
+
     // /**
     //  * Converts a class name to its table name (pluralized)
     //  * naming conventions. For example, converts "Person" to "people"
