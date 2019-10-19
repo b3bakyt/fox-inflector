@@ -14,4 +14,8 @@ describe('slug tests', () => {
         expect(Inflector.slug('USER_GROUP_STATES', ' ', false)).equal('USER GROUP STATES');
         done();
     });
+    it('should map special characters to ASCII', (done) => {
+        expect(Inflector.slug('яблоко от яблони нe δàŁĒķỒ')).equal('yabloko-ot-yabloni-ne-daleko');
+        done();
+    });
 });
