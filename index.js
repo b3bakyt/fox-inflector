@@ -402,18 +402,23 @@ const Inflector = {
             .join(separator);
     },
 
-    // /**
-    //  * Converts an ID into a CamelCase name.
-    //  * Words in the ID separated by `separator` (defaults to '-') will be concatenated into a CamelCase name.
-    //  * For example, 'post-tag' is converted to 'PostTag'.
-    //  * @param string id the ID to be converted
-    //  * @param string separator the character used to separate the words in the ID
-    //  * @return string the resulting CamelCase name
-    //  */
-    // id2camel: function(id, separator = '-')
-    // {
-    //     return str_replace(' ', '', ucwords(implode(' ', explode(separator, id))));
-    // },
+    /**
+     * Converts an ID into a CamelCase name.
+     * Words in the ID separated by `separator` (defaults to '-') will be concatenated into a CamelCase name.
+     * For example, 'post-tag' is converted to 'PostTag'.
+     * @param string id the ID to be converted
+     * @param string separator the character used to separate the words in the ID
+     * @return string the resulting CamelCase name
+     */
+    id2camel: function(id, separator = '-')
+    {
+        return id
+            .split(separator)
+            .map(val => val.trim())
+            .map(val => val.charAt(0).toUpperCase() + val.slice(1))
+            .join('');
+        // return str_replace(' ', '', ucwords(implode(' ', explode(separator, id))));
+    },
 
     /**
      * Converts any "CamelCased" into an "underscored_word".
