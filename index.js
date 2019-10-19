@@ -393,11 +393,13 @@ const Inflector = {
      */
     camel2id: function(name, separator = '-')
     {
-        if (separator === '_') {
-            return trim(strtolower(preg_replace('/(?<![A-Z])[A-Z]/', '_\0', name)), '_');
-        } else {
-            return trim(strtolower(str_replace('_', separator, preg_replace('/(?<![A-Z])[A-Z]/', separator . '\0', name))), separator);
-        }
+        return name.replace(/([A-Z])/g, ' $1')
+            .replace(/([\-\_\.])/g, ' ')
+            .replace(/(  )/g, ' ')
+            .toLowerCase()
+            .trim()
+            .split(' ')
+            .join(separator);
     },
 
     // /**
