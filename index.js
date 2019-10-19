@@ -293,6 +293,13 @@ const TRANSLITERATION = {
     'ế': 'e', 'ề': 'e', 'ể': 'e', 'ễ': 'e', 'ệ': 'e'
 };
 
+/**
+ return true if in range, otherwise false
+ */
+function inRange(x, min, max) {
+    return ((x-min)*(x-max) <= 0);
+}
+
 const Inflector = {
     /**
      * Converts a word to its plural form.
@@ -505,23 +512,25 @@ const Inflector = {
             .join('');
     },
 
-    // /**
-    //  * Converts number to its ordinal English form. For example, converts 13 to 13th, 2 to 2nd ...
-    //  * @param integer number the number to get its ordinal value
-    //  * @return string
-    //  */
-    // ordinalize: function(number)
-    // {
-    //     if (in_(number % 100), range(11, 13)) {
-    //         return number . 'th';
-    //     }
-    //     switch (number % 10) {
-    //         case 1: return number . 'st';
-    //         case 2: return number . 'nd';
-    //         case 3: return number . 'rd';
-    //         default: return number . 'th';
-    //     }
-    // }
+    /**
+     * Converts number to its ordinal English form. For example, converts 13 to 13th, 2 to 2nd ...
+     * @param integer number the number to get its ordinal value
+     * @return string
+     */
+    ordinalize: function(number)
+    {
+
+        const reminder = number % 100;
+        if (inRange(reminder, 11, 13)) {
+            return number + 'th';
+        }
+        switch (number % 10) {
+            case 1: return number + 'st';
+            case 2: return number + 'nd';
+            case 3: return number + 'rd';
+            default: return number + 'th';
+        }
+    }
 }
 
-module.exports = Inflector;
+module.exports = Object.freeze(Inflector);
