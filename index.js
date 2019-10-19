@@ -383,22 +383,23 @@ const Inflector = {
             .join(' ');
     },
 
-    // /**
-    //  * Converts a CamelCase name into an ID in lowercase.
-    //  * Words in the ID may be concatenated using the specified character (defaults to '-').
-    //  * For example, 'PostTag' will be converted to 'post-tag'.
-    //  * @param string name the string to be converted
-    //  * @param string separator the character used to concatenate the words in the ID
-    //  * @return string the resulting ID
-    //  */
-    // camel2id: function(name, separator = '-')
-    // {
-    //     if (separator === '_') {
-    //         return trim(strtolower(preg_replace('/(?<![A-Z])[A-Z]/', '_\0', name)), '_');
-    //     } else {
-    //         return trim(strtolower(str_replace('_', separator, preg_replace('/(?<![A-Z])[A-Z]/', separator . '\0', name))), separator);
-    //     }
-    // },
+    /**
+     * Converts a CamelCase name into an ID in lowercase.
+     * Words in the ID may be concatenated using the specified character (defaults to '-').
+     * For example, 'PostTag' will be converted to 'post-tag'.
+     * @param string name the string to be converted
+     * @param string separator the character used to concatenate the words in the ID
+     * @return string the resulting ID
+     */
+    camel2id: function(name, separator = '-')
+    {
+        if (separator === '_') {
+            return trim(strtolower(preg_replace('/(?<![A-Z])[A-Z]/', '_\0', name)), '_');
+        } else {
+            return trim(strtolower(str_replace('_', separator, preg_replace('/(?<![A-Z])[A-Z]/', separator . '\0', name))), separator);
+        }
+    },
+
     // /**
     //  * Converts an ID into a CamelCase name.
     //  * Words in the ID separated by `separator` (defaults to '-') will be concatenated into a CamelCase name.
