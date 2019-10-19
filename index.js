@@ -456,16 +456,17 @@ const Inflector = {
         return word.charAt(0).toLowerCase() + word.slice(1);
     },
 
-    // /**
-    //  * Converts a class name to its table name (pluralized)
-    //  * naming conventions. For example, converts "Person" to "people"
-    //  * @param string className the class name for getting related table_name
-    //  * @return string
-    //  */
-    // tableize: function(className)
-    // {
-    //     return this.pluralize(this.underscore(className));
-    // },
+    /**
+     * Converts a class name to its table name (pluralized)
+     * naming conventions. For example, converts "Person" to "people"
+     * @param string className the class name for getting related table_name
+     * @return string
+     */
+    tableize: function(className)
+    {
+        return this.pluralize(this.underscore(className));
+    },
+
     // /**
     //  * Returns a string with all spaces converted to given replacement and
     //  * non word characters removed.  Maps special characters to ASCII using
