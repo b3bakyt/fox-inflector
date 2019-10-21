@@ -1,6 +1,8 @@
 # Inflector 
 The library supplies functions to perform string manipulations with regard to uppercase/lowercase and singular/plural forms of words.
 
+Find it in [github](https://github.com/b3bakyt/fox-inflector)
+
 ### Installation
 
 ```
